@@ -1,0 +1,82 @@
+window.addEventListener('load', () => {
+	let name
+	let maxSalary
+	let minSalary
+	let employeData = []
+	const btn = document
+		.getElementById('submit')
+		.addEventListener('click', () => {
+			name = document.getElementById('name').value
+			maxSalary = document.getElementById('maxsalary').value
+			minSalary = document.getElementById('minsalary').value
+			if (!name) {
+				alert('Please Enter Name!')
+			} else if (!maxSalary) {
+				alert('Please Enter Max Salary!')
+			} else if (!minSalary) {
+				alert('Please Enter Min Salary!')
+			}
+			let emp = {
+				name,
+				maxSalary,
+				minSalary,
+
+				tax: ((maxSalary * 1 + minSalary * 1) / 2 / 100) * 4,
+			}
+			employeData.push(emp)
+			let table = document.getElementById('table')
+			while (table.childNodes.length > 2) {
+				table.removeChild(table.lastChild)
+			}
+			employeData.forEach((emp) => {
+				let row = document.createElement('tr')
+
+				let update = document.createElement('button')
+				let del = document.createElement('button')
+				let updateCell = document.createElement('td')
+				let delCell = document.createElement('td')
+				del.onclick = () => {
+					row.remove()
+				}
+				update.onclick = () => {
+					let newMaxSal = prompt('Enter new Max Salary')
+					let newMinSal = prompt('Enter new Min Salary')
+
+					objIndex = employeData.findIndex(
+						(obj) => obj.name == emp.name,
+					)
+					let arr = employeData[objIndex]
+					let maxId = `${arr.name + arr.maxSalary}`
+					let minId = `${arr.name + arr.minSalary}`
+					arr.maxSalary = newMaxSal
+					arr.minSalary = newMinSal
+
+					let maxVal = document.getElementById(maxId)
+					let minVal = document.getElementById(minId)
+					maxVal.innerHTML = newMaxSal
+					minVal.innerHTML = newMinSal
+				}
+				updateCell.appendChild(update)
+				delCell.appendChild(del)
+				Object.values(emp).forEach((text) => {
+					let cell = document.createElement('td')
+					cell.setAttribute('id', emp.name + text)
+					let textNode = document.createTextNode(text)
+					update.innerHTML = 'Update'
+					del.innerHTML = 'Delete'
+
+					row.appendChild(cell)
+					row.appendChild(updateCell)
+					row.appendChild(delCell)
+
+					cell.appendChild(textNode)
+				})
+				table.appendChild(row)
+			})
+			// myTable.appendChild(table)
+			document.getElementById('name').value = ''
+			document.getElementById('maxsalary').value = ''
+			document.getElementById('minsalary').value = ''
+			console.log(employeData)
+		})
+})
